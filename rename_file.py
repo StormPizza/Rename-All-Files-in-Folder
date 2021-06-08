@@ -32,9 +32,21 @@ def rename(folder_to_affect):
         path = get_pathname(path_list_2, '/')
         path_name_to_add = get_pathname(path_list_2, '_', True)
 
+        files = os.listdir(path)        
+        file_list = []
+        for _, file2 in enumerate(files):
+            # IGNORE BACKUP, this prevents changing the backup file's name
+            if file2 == backup_file_name:
+                continue
+            if os.path.isdir(os.path.join(path, file2)):
+                # for FOLDERS, go into folder and change all names
+                rename_recursive(path_list_2, file2, backup_file)
+            else:
+                file_list.append(file2)
+        file_list.sort()
+        
         layer_file_count = 0
-        files = os.listdir(path)
-        for index, file in enumerate(files):
+        for file in file_list:
             # IGNORE BACKUP, this prevents changing the backup file's name
             if file == backup_file_name:
                 continue
